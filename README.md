@@ -1,0 +1,3 @@
+In the first week i read and learnt about the basics of python and share market like OHLC,dividends,bullish and bearish behaviour and japanese candlesticksetc.
+In the next week i learnt about basic trading strategies like mean reversion,momentum,market making etc.
+In the following 2 weeks i further deep dived into more advanced trading strategies such as z-score,bollinger band, movinig average crossover etc. After learning all these basics for analysing data i analysed 10 year data of nifty and then found a suitable strategy for the same and generated a csv file containg the signal when to buy,sell or hold.
