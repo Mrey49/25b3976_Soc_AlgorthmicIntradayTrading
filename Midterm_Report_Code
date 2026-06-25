@@ -1,0 +1,56 @@
+"""I analysed many stratgies and found a long over moving strategy as the most suitable one where i buy the stock when moving average of 17days is more than the moving average of 65 days and sell it viceversa.On other days the signal generated is 0."""
+import pandas as pd
+
+df = pd.read_csv("Nifty 50 Historical Data.csv")
+
+df["Date"] = pd.to_datetime(df["Date"], dayfirst=True)
+
+df["Price"] = (
+    df["Price"]
+    .astype(str)
+    .str.replace(",", "")
+    .astype(float)
+)
+
+df = df.sort_values("Date")
+
+df["MA17"] = df["Price"].rolling(17).mean()
+df["MA65"] = df["Price"].rolling(65).mean()
+
+signals = []
+position = 0
+
+for i in range(len(df)):
+
+    if i == 0:
+        signals.append(0)
+        continue
+
+    buy = (
+        df["MA17"].iloc[i] > df["MA65"].iloc[i]
+        and df["MA17"].iloc[i - 1] <= df["MA65"].iloc[i - 1]
+    )
+
+    sell = (
+        df["MA17"].iloc[i] < df["MA65"].iloc[i]
+        and df["MA17"].iloc[i - 1] >= df["MA65"].iloc[i - 1]
+    )
+
+    if buy and position == 0:
+        signals.append(1)
+        position = 1
+
+    elif sell and position == 1:
+        signals.append(-1)
+        position = 0
+
+    else:
+        signals.append(0)
+
+df["Signal"] = signals
+
+submission = df[["Date", "Signal"]]
+
+submission.to_csv("submission.csv", index=False)
+
+print("submission.csv created")
